@@ -1,21 +1,19 @@
-class Course < ApplicationRecord
+class Exercice < ApplicationRecord
+  
   ##########  SECTION RELATIONS  ########## 
   belongs_to  :user
-  has_rich_text :content
-  has_many :exercices, class_name: "Exercice", foreign_key: "course_id", dependent: :destroy
-  
+  belongs_to :course
+
+
   
   ##########  SECTION BEFORE VALIDATIONS  ##########
   before_validation :strip_fields
 
 
   ########## SECTION VALIDATIONS  ########## 
-  validates :title, :content, :slug, presence: true
-  validates :title, uniqueness: true, length: {minimum:30, maximum:200,
+  validates :title, :slug, presence: true, uniqueness: true, length: {minimum:30, maximum:200,
     mesage:"vous n'avez pas respecter les limites"}
 
-  validates :content, length: {minimum:200, maximum:10000,
-                      mesage:"vous n'avez pas respecter les limites"}
 
 
   ##########  SECTION URL  ########## 
@@ -33,7 +31,7 @@ class Course < ApplicationRecord
   def strip_fields
     self.title = title.strip.gsub!(/\s+/, ' ').downcase
   end
- 
+  # supprimé les espaces doubles entre les mots
   ##########  SECTION BEFORE SAVE  ########## 
   before_save do  
     self.title = title.capitalize

@@ -10,6 +10,16 @@
     <div class="inline-block ml-2">
       <%= button_to 'Destroy this course', course_path(@course), method: :delete, class: "mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium" %>
     </div>
-    <%= link_to 'Back to courses', courses_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    
+<%= link_to 'Nouvel Exercice', new_course_exercice_path(@course),
+                        data:{ turbo_frame: "exercice_new"}, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+
+    <!-- Exercises Feed-->
+    <div class="border bg-white m-2">
+        <!-- Exercises New Form-->
+        <%= turbo_frame_tag dom_id(Exercice.new) %>
+        <!-- Exercises feed-->
+        <%= render "courses/shared/exercises", course:@course %>
+    </div>
   </div>
 </div>

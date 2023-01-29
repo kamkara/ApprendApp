@@ -1,0 +1,27 @@
+<%= form_with(model: exercice, url: [@course, exercice], class: "contents") do |form| %>
+
+  <% if exercice.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(exercice.errors.count, "error") %> prohibited this exercice from being saved:</h2>
+
+      <ul>
+        <% exercice.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.text_field :title, 
+    placeholder:"Le titre de l'exercice", 
+    class: "block rounded-md border border-blue-200  px-3 py-2 mt-2 w-full" %>
+  </div>
+
+
+
+  <div class="inline my-4">
+    <%= form.submit "Créer Exercice", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<%= link_to 'Nouvel. Question', exercices_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<% end %>
