@@ -1,17 +1,19 @@
 <div id="<%= dom_id course %>">
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Title:</strong>
-    <%= course.title %>
-  </p>
+<div class=" card border p-2 rounded-lg">
 
-  <p class="my-5">
-    <strong class="block font-medium mb-1">Content:</strong>
-    <%= course.content %>
-  </p>
+  <div class="my-5 font-semibold">    
+    <%= course.title %>
+  </div>
+
+  <div class="p-2">
+    <%= truncate(strip_tags(course.content.to_s.html_safe), length: 200) %>
+    
+  </div>
 
   <% if action_name != "show" %>
-    <%= link_to "Show this course", course, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <%= link_to 'Edit this course', edit_course_path(course), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Afficher plus", course, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Modifier', edit_course_path(course), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
     <hr class="mt-6">
   <% end %>
+</div>
 </div>
