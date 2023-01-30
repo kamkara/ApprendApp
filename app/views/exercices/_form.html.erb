@@ -1,8 +1,8 @@
-<%= form_with(model: exercice, url: [@course, exercice], class: "contents") do |form| %>
+<%= form_with(model: exercice, url: [@course, exercice], class: "contents") do |f| %>
 
   <% if exercice.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
-      <h2><%= pluralize(exercice.errors.count, "error") %> prohibited this exercice from being saved:</h2>
+      <h2><%= pluralize(exercice.errors.count, "error") %> erreur à empêché cet exercice d'être enregistré :</h2>
 
       <ul>
         <% exercice.errors.each do |error| %>
@@ -13,15 +13,40 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.text_field :title, 
-    placeholder:"Le titre de l'exercice", 
-    class: "block rounded-md border border-blue-200  px-3 py-2 mt-2 w-full" %>
+    <%= f.text_field :title, placeholder:"Le titre de l'exercice", class: "w-full" %>
   </div>
 
+  <div data-controller="nested-form" data-nested-form-index-value='QUESTION_RECORD' class="border py-4 px-2">
 
+    <!--  Question Form-->
+    <div class="my-4">
+      <template data-nested-form-target='template'>
+        <%#= f.fields_for :questions, Question.new, child_index: 'QUESTION_RECORD' do |question| %>
+          <%#= render 'question_fields', f: question %>
+        <%# end %>
+      </template>
+    </div>
+    
+    <div class="">
+      <%= f.fields_for :questions do |question| %>
+          <%= render 'question_fields', f: question %>
+      <% end %>
+    </div>
+
+    <div class="flex my-4">
+      <!-- Add Question button-->
+      <div data-nested-form-target="add_item" class="mx-4">
+        <%= link_to "Ajouter Nouvelle Question", "#", data: { action: "nested-form#add_question_association" }, class:"add-items " %>
+      </div>
+      <!-- Add Question button-->
+      <div data-nested-form-target="add_item" class="">
+        <%#= link_to "Ajouter Nouvelle Question", "#", data: { action: "nested-form#add_association" }, class:"add-items " %>
+      </div>
+    </div>
+  </div>
 
   <div class="inline my-4">
-    <%= form.submit "Créer Exercice", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= f.submit "Créer Exercice", class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
-<%= link_to 'Nouvel. Question', exercices_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+
 <% end %>

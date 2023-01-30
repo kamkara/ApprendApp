@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_29_212555) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_30_115808) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_212555) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "answered_questions", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "answer_id", null: false
+    t.bigint "result_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_id"], name: "index_answered_questions_on_answer_id"
+    t.index ["question_id"], name: "index_answered_questions_on_question_id"
+    t.index ["result_id"], name: "index_answered_questions_on_result_id"
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.boolean "correct"
+    t.bigint "question_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.index ["question_id"], name: "index_answers_on_question_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "title"
     t.string "slug"
@@ -68,6 +88,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_212555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id"
+    t.integer "type"
     t.index ["course_id"], name: "index_exercices_on_course_id"
     t.index ["user_id"], name: "index_exercices_on_user_id"
   end
@@ -81,6 +102,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_212555) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "title"
+    t.bigint "exercice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "content"
+    t.index ["exercice_id"], name: "index_questions_on_exercice_id"
+  end
+
+  create_table "results", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "exercice_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercice_id"], name: "index_results_on_exercice_id"
+    t.index ["user_id"], name: "index_results_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -98,7 +137,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_29_212555) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answered_questions", "answers"
+  add_foreign_key "answered_questions", "questions"
+  add_foreign_key "answered_questions", "results"
+  add_foreign_key "answers", "questions"
   add_foreign_key "courses", "users"
   add_foreign_key "exercices", "courses"
   add_foreign_key "exercices", "users"
+  add_foreign_key "questions", "exercices"
+  add_foreign_key "results", "exercices"
+  add_foreign_key "results", "users"
 end

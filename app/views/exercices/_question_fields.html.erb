@@ -1,0 +1,31 @@
+<div class='nested-fields box px-2' data-controller='dynamic-select'>
+
+    <div class='my-4'>
+        <%= f.hidden_field :_destroy %>
+        <%= f.text_field :title, placeholder: 'Nouvelle Question', class:'w-full' %>
+    </div>
+
+    <div class="my-4">
+        <%= link_to "Supprimé Question", "#", data: { action: "click->nested-form#remove_association" },
+            class:"add-items" %>
+    </div>
+
+    <div data-controller="nested-form" data-nested-form-index-value='ANSWER_RECORD'class="my-4">
+        <template data-nested-form-target='template'>
+            <%= f.fields_for :answers, Answer.new, child_index: 'ANSWER_RECORD' do |answer| %>
+                <%= render 'answer_fields', f: answer %>
+            <% end %>
+        </template>
+
+        <%= f.fields_for :answers do |answer| %>
+            <%= render 'answer_fields', f: answer %>
+        <% end %>
+
+        <div class='my-4'>
+            <%= f.label :content, 'Votre explication de la reponse' %>
+            <%= f.text_field :content, placeholder: 'Explication ...', class:'w-full' %>
+        </div>
+        
+    </div>
+
+</div>

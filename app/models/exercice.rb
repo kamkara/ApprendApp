@@ -5,6 +5,10 @@ class Exercice < ApplicationRecord
   belongs_to :course
 
 
+  #enum exercice_type: { single_choice: 0, multiple_choice: 1, long_answer: 2 }
+  #def self.question_type_select
+  #  question_types.keys.map { |k| [k.titleize, k] }
+  #end
   
   ##########  SECTION BEFORE VALIDATIONS  ##########
   before_validation :strip_fields
